@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="MagicHomeAPI" />
+    <None Remove="Haukcode.ArtNet" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MagicHomeAPI" Version="1.4.0" />
+    <PackageReference Include="Haukcode.ArtNet" Version="1.0.18" />
+  </ItemGroup>
+</Project>
