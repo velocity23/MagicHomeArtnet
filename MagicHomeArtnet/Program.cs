@@ -5,7 +5,7 @@ using Haukcode.ArtNet.Sockets;
 using Haukcode.Sockets;
 using MagicHome;
 
-namespace MyApp // Note: actual namespace depends on the project name.
+namespace MagicHomeArtnet
 {
     internal class Program
     {
@@ -13,6 +13,7 @@ namespace MyApp // Note: actual namespace depends on the project name.
         static short universe;
         static short startChannel;
         static Light light;
+        static Tuple<byte, byte, byte> currentData;
 
         static void Main(string[] args)
         {
@@ -181,7 +182,9 @@ namespace MyApp // Note: actual namespace depends on the project name.
                     }
                 }
 
-                if (light.Color.Red == red && light.Color.Green == green && light.Color.Blue == blue) return;
+                if (currentData.Item1 == red && currentData.Item2 == green && currentData.Item3 == blue) return;
+
+                currentData = new Tuple<byte, byte, byte>(red, green, blue);
 
                 await light.SetColorAsync(red, green, blue);
             }
