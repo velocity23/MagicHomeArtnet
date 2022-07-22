@@ -1,9 +1,45 @@
-﻿using System.Net;
+using System.Net;
 using Haukcode.ArtNet;
 using Haukcode.ArtNet.Packets;
 using Haukcode.ArtNet.Sockets;
 using Haukcode.Sockets;
 using MagicHome;
+
+/*
+==== CHANNEL ASSIGNMENTS ====
+| Index | Description  | Notes     |
+| ----- | ------------ | --------- |
+| 0     | Intensity    |           |
+| 1     | Red          |           |
+| 2     | Green        |           |
+| 3     | Blue         |           |
+| 4     | Preset       | See below |
+| 5     | Preset speed |           |
+
+==== PRESETS ====
+| DMX Values | Description              |
+| ---------- | ------------------------ |
+| 0-10       | Off                      |
+| 11-20      | Seven Color Crossfade    |
+| 21-30      | Red Gradual Change       |
+| 31-40      | Green Gradual Change     |
+| 41-50      | Blue Gradual Change      |
+| 51-60      | Yellow Gradual Change    |
+| 61-70      | Cyan Gradual Change      |
+| 71-80      | Purple Gradual Change    |
+| 81-90      | White Gradual Change     |
+| 91-100     | Red-Green Crossfade      |
+| 101-110    | Seven Color Strobe Flash |
+| 111-120    | Red Strobe Flash         |
+| 121-130    | Green Strobe Flash       |
+| 131-140    | Blue Strobe Flash        |
+| 141-150    | Yellow Strobe Flash      |
+| 151-160    | Cyan Strobe Flash        |
+| 161-170    | Purple Strobe Flash      |
+| 171-180    | White Strobe Flash       |
+| 181-190    | Seven Colors Jumping     |
+| 191-255    | Off                      |
+*/
 
 namespace MagicHomeArtnet
 {
@@ -13,7 +49,7 @@ namespace MagicHomeArtnet
         static short universe;
         static short startChannel;
         static Light light;
-        static Tuple<byte, byte, byte> currentData;
+        static Tuple<byte, byte, byte> currentData = new Tuple<byte, byte, byte>(0, 0, 0);
 
         static void Main(string[] args)
         {
@@ -97,6 +133,12 @@ namespace MagicHomeArtnet
                 if (!light.Power)
                 {
                     await light.TurnOnAsync();
+                }
+
+                if (intensity == 0 || (red == 0 && green == 0 && blue == 0))
+                {
+                    await light.SetColorAsync(0, 0, 0);
+                    return;
                 }
 
                 if (preset > 10)
